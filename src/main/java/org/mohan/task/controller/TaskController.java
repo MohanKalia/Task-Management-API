@@ -47,10 +47,15 @@ public class TaskController {
             @PathVariable UUID taskId,
             @Valid @RequestBody UpdateTaskRequestDto dto
     ) {
-       UpdateTaskRequest updateTaskRequest = taskMapper.fromDto(dto);
-       Task task = taskService.updateTask(taskId, updateTaskRequest);
-       TaskDto taskDto = taskMapper.toDto(task);
-       return new ResponseEntity<>(taskDto, HttpStatus.OK);
+        UpdateTaskRequest updateTaskRequest = taskMapper.fromDto(dto);
+        Task task = taskService.updateTask(taskId, updateTaskRequest);
+        TaskDto taskDto = taskMapper.toDto(task);
+        return new ResponseEntity<>(taskDto, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/{taskId}")
+    public ResponseEntity<?> deleteTask(@PathVariable UUID uuid) {
+        taskService.deleteTask(uuid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
