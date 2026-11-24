@@ -10,10 +10,9 @@ import org.mohan.task.mapper.TaskMapper;
 import org.mohan.task.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/tasks")
@@ -30,7 +29,14 @@ public class TaskController {
         // converts it into something that can be safely used a service request
         Task task = taskService.createTask(createTaskRequest); // saving it to the database
         TaskDto taskDto = taskMapper.toDto(task); // returning the task as JSON
-        return new  ResponseEntity<>(taskDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(taskDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TaskDto>> listTasks() {
+        List<Task> listTask = taskService.listTasks();
+        List<TaskDto> listTaskDto = listTask.stream().map(taskMapper::toDto).toList();
+        return new ResponseEntity<>(listTaskDto, HttpStatus.OK);
     }
 
 }

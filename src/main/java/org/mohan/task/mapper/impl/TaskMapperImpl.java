@@ -5,7 +5,9 @@ import org.mohan.task.domain.dto.CreateTaskRequestDto;
 import org.mohan.task.domain.dto.TaskDto;
 import org.mohan.task.domain.entity.Task;
 import org.mohan.task.mapper.TaskMapper;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TaskMapperImpl implements TaskMapper {
     @Override
     public CreateTaskRequest fromDto(CreateTaskRequestDto dto) {
