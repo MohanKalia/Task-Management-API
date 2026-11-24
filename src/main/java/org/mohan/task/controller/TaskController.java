@@ -3,8 +3,10 @@ package org.mohan.task.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mohan.task.domain.CreateTaskRequest;
+import org.mohan.task.domain.UpdateTaskRequest;
 import org.mohan.task.domain.dto.CreateTaskRequestDto;
 import org.mohan.task.domain.dto.TaskDto;
+import org.mohan.task.domain.dto.UpdateTaskRequestDto;
 import org.mohan.task.domain.entity.Task;
 import org.mohan.task.mapper.TaskMapper;
 import org.mohan.task.service.TaskService;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/tasks")
@@ -37,6 +40,17 @@ public class TaskController {
         List<Task> listTask = taskService.listTasks();
         List<TaskDto> listTaskDto = listTask.stream().map(taskMapper::toDto).toList();
         return new ResponseEntity<>(listTaskDto, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/{taskId}")
+    public ResponseEntity<TaskDto> updateTask(
+            @PathVariable UUID taskId,
+            @Valid @RequestBody UpdateTaskRequestDto dto
+    ) {
+       UpdateTaskRequest updateTaskRequest = taskMapper.fromDto(dto);
+       Task task = taskService.updateTask(taskId, updateTaskRequest);
+       TaskDto taskDto = taskMapper.toDto(task);
+       return new ResponseEntity<>(taskDto, HttpStatus.OK);
     }
 
 }
